@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import Assento, Sessao, db, User, Evento, Reserva
-from services import UserService, EventoService, SessaoService, AssentoService, SalaService, ReservaService
+from services import UserService, EventoService, SessaoService, AssentoService, SalaService, ReservaService, CEPService
 
 # criando o blueprint 
 bp = Blueprint('api', __name__)
@@ -514,12 +514,14 @@ def create_sala():
 
 # Endpoint para listar todas as salas
 @bp.route('/salas', methods=['GET'])
+@bp.route('/salas', methods=['GET'])
 def get_salas():
     salas = SalaService.get_all_salas()
     lista_salas = []
 
     for s in salas:
-        dados_endereco = SalaService.obter_endereco_sala(s.id) 
+
+        dados_endereco = CEPService.buscar_endereco(s.cep) if s.cep else None
         
         lista_salas.append({
             "id": s.id,
