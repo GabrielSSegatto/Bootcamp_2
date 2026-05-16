@@ -1,4 +1,5 @@
 from models import Sala, db, User, Sessao, Assento, Reserva, Evento
+import requests
 
 # ========== USUARIO ===========
 class UserService:
@@ -407,3 +408,25 @@ class ReservaService:
 
         db.session.commit()
         return reserva  
+
+# ========== CEP ===============
+class CEPService:
+    @staticmethod
+    def buscar_endereco(cep):
+        # Limpeza básica do input
+        cep = str(cep).replace("-", "").replace(".", "").strip()
+        
+        if len(cep) != 8:
+            return None
+
+        try:
+            # Chamada para a API ViaCEP
+            response = requests.get(f"https://viacep.com.br/ws/{cep}/json/", timeout=5)
+            if response.status_code == 200:
+                dados = response.json()
+                if "erro" in dados:
+                    return None
+                return dados
+        except Exception:
+            return None
+        return None

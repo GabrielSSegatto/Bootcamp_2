@@ -4,20 +4,17 @@ from datetime import datetime, timedelta
 
 def popular_banco():
     with app.app_context():
-        # Verificação de segurança: se já tiver usuário, não roda de novo para não dar erro de CPF duplicado
         if User.query.first():
             print("⚠️ O banco já possui dados! Limpe o banco antes de rodar o seed novamente.")
             return
 
         print("Enchendo o tanque do banco de dados...")
 
-        # 1. Criando as Salas
-        sala1 = Sala(nome="Sala 01", tipo="IMAX", capacidade=10)
-        sala2 = Sala(nome="Sala 02", tipo="3D", capacidade=10)
+        sala1 = Sala(nome="Auditório Norte", tipo="IMAX", capacidade=10, cep="70790075")
+        sala2 = Sala(nome="Espaço Cultural", tipo="3D", capacidade=10, cep="70070000")
         db.session.add_all([sala1, sala2])
-        db.session.commit() # Precisa commitar aqui para as salas ganharem um ID (sala1.id)
+        db.session.commit()
 
-        # 2. Criando os Assentos (Gerando A1 até A10 para a Sala 1 e B1 a B10 para Sala 2)
         print("Instalando os assentos...")
         assentos = []
         for i in range(1, 11):
@@ -25,13 +22,11 @@ def popular_banco():
             assentos.append(Assento(numero=f"B{i}", sala_id=sala2.id))
         db.session.add_all(assentos)
 
-        # 3. Criando os Eventos
-        evento1 = Evento(nome="Show de Rock")
-        evento2 = Evento(nome="Palestra de Tecnologia")
+        evento1 = Evento(nome="Workshop de Tecnologia")
+        evento2 = Evento(nome="Cine Debate Comunitário")
         db.session.add_all([evento1, evento2])
         db.session.commit()
 
-        # 4. Criando as Sessões (Jogando as datas para amanhã e depois de amanhã)
         hoje = datetime.now()
         sessao1 = Sessao(
             horario_data=hoje + timedelta(days=1, hours=2), 
@@ -48,19 +43,17 @@ def popular_banco():
         db.session.add_all([sessao1, sessao2])
         db.session.commit()
 
-        # 5. Criando os Usuários
         user1 = User(name="João Gabriel", cpf="12345678901")
         user2 = User(name="Gabriel Soares", cpf="10987654321")
         db.session.add_all([user1, user2])
         db.session.commit()
 
-        # 6. Criando uma Reserva (O João vai reservar o Assento A1 para o Show)
         primeiro_assento = Assento.query.filter_by(sala_id=sala1.id).first()
         reserva1 = Reserva(user_id=user1.id, sessao_id=sessao1.id, assento_id=primeiro_assento.id)
         db.session.add(reserva1)
         db.session.commit()
 
-        print("✅ Banco populado com sucesso! ")
+        print("✅ Banco populado com sucesso!")
 
 if __name__ == '__main__':
     popular_banco()
