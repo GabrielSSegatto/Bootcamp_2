@@ -12,6 +12,23 @@ bp = Blueprint('api', __name__)
 # 404 - Not Found: Recurso não encontrado
 # 500 - Internal Server Error: Erro inesperado no servidor
 
+@bp.route('/')
+def index():
+    return {
+        "status": "Online",
+        "projeto": "CineComunidade API - Etapa Intermediária",
+        "endpoints_principais": {
+            "usuarios": "/users",
+            "eventos": "/eventos",
+            "sessoes": "/sessoes",
+            "salas": "/salas",
+            "reservas": "/reservas",
+            "assentos": "/assentos"
+        },
+        "instrucoes": "Para testar, adicione um dos caminhos acima na URL. Exemplo: /eventos",
+        "api_docs": "Integrado com ViaCEP para localização de salas."
+    }, 200
+
 #==========================================
 # USUARIO
 # =========================================

@@ -18,7 +18,7 @@ instance_path = os.path.join(basedir, 'instance')
 if not os.path.exists(instance_path):
     os.makedirs(instance_path)
 
-# 3. Montamos o caminho completo do banco de dados
+
 db_path = os.path.join(instance_path, 'cinema.db')
 
 # 4. Configuramos a URI usando o caminho absoluto
