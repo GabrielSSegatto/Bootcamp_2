@@ -3,28 +3,34 @@ from flask import Flask
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 
-# Carregando as variáveis de ambiente do arquivo .env
 load_dotenv()
 
-# Importa a instância do banco
 from models import db
 
-# Criando a aplicação Flask
 app = Flask(__name__)
 
-# CONFIGURAÇÃO DO BANCO DE DADOS
-# Ajustado para apontar para a pasta instance/cinema.db como fallback
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///instance/cinema.db')
+# --- INÍCIO DA CORREÇÃO PARA O DEPLOY ---
+# 1. Pegamos o caminho absoluto da pasta onde o app.py está
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# 2. Definimos o caminho da pasta instance e garantimos que ela exista
+instance_path = os.path.join(basedir, 'instance')
+if not os.path.exists(instance_path):
+    os.makedirs(instance_path)
+
+# 3. Montamos o caminho completo do banco de dados
+db_path = os.path.join(instance_path, 'cinema.db')
+
+# 4. Configuramos a URI usando o caminho absoluto
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{db_path}')
+# --- FIM DA CORREÇÃO ---
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'uma-chave-muito-segura')
 
-# Chave secreta com fallback para segurança do deploy
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'uma-chave-muito-segura-e-secreta')
-
-# Conecta o bd e as migrations com a aplicação
 db.init_app(app)
 migrate = Migrate(app, db)
 
-# Importando as rotas
 from routes import bp
 app.register_blueprint(bp)
 
