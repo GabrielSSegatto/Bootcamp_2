@@ -516,16 +516,19 @@ def create_sala():
 @bp.route('/salas', methods=['GET'])
 def get_salas():
     salas = SalaService.get_all_salas()
+    lista_salas = []
 
-    lista_salas = [
-        {
+    for s in salas:
+        dados_endereco = SalaService.obter_endereco_sala(s.id) 
+        
+        lista_salas.append({
             "id": s.id,
             "nome": s.nome,
             "tipo": s.tipo,
-            "capacidade": s.capacidade
-        }
-        for s in salas
-    ]
+            "capacidade": s.capacidade,
+            "cep": s.cep,
+            "localizacao": dados_endereco 
+        })
 
     return jsonify(lista_salas), 200
 
