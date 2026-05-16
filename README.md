@@ -2,6 +2,8 @@
 
 API em Flask para gerenciamento de reservas de eventos/sessoes em cinema, com CRUD completo de usuarios, eventos, salas, assentos, sessoes e reservas.
 
+Link do Deploy: https://bootcamp-2-l6ix.onrender.com
+
 ## Visao geral
 
 O projeto resolve um problema real de controle de assentos por sessao, impedindo dupla reserva do mesmo assento para a mesma sessao.
