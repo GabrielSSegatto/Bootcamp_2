@@ -21,7 +21,8 @@ def client():
 def setup_data():
     """Fixture que cria dados de teste"""
     # Criar sala
-    sala = Sala(nome="Sala 01", tipo="2D", capacidade=50)
+    # Criar sala (Arrumado pelo Caramez: Adicionado o CEP que agora é obrigatório)
+    sala = Sala(nome="Sala 01", tipo="2D", capacidade=50, cep="70070000")
     db.session.add(sala)
     db.session.commit()
 
@@ -62,7 +63,7 @@ def setup_data():
 
 # ===== TESTES DE EVENTO =====
 class TestEvento:
-    
+
     def test_criar_evento_valido(self, client):
         """Teste: Criar evento com nome válido"""
         response = client.post('/eventos', json={'nome': 'Conferência Tech 2026'})
@@ -113,7 +114,7 @@ class TestEvento:
 
 # ===== TESTES DE USUÁRIO =====
 class TestUsuario:
-    
+
     def test_criar_usuario_valido(self, client):
         """Teste: Criar usuário com CPF válido (11 dígitos)"""
         response = client.post('/users', json={
@@ -122,6 +123,16 @@ class TestUsuario:
         })
         assert response.status_code == 201
         assert response.json['usuario']['name'] == 'Maria Santos'
+
+    def test_criar_usuario_com_cpf_sujo(self, client):
+        """Teste: Garantir que o backend limpa o CPF formatado antes de salvar"""
+        response = client.post('/users', json={
+            'name': 'carlos almeida',
+            'cpf': '123.456.789-00'
+        })
+        assert response.status_code == 201
+        assert response.json['usuario']['name'] == 'Carlos Almeida'
+        assert response.json['usuario']['cpf'] == '12345678900'
 
     def test_criar_usuario_sem_dados(self, client):
         """Teste: Validação - Criar usuário sem dados deve falhar"""
@@ -269,7 +280,8 @@ class TestSala:
         response = client.post('/salas', json={
             'nome': 'Auditório Principal',
             'tipo': '2D',
-            'capacidade': 100
+            'capacidade': 100,
+            'cep': '70790075'
         })
         assert response.status_code == 201
         assert response.json['sala']['nome'] == 'Auditório Principal'

@@ -485,14 +485,15 @@ def delete_assento(assento_id):
 def create_sala():
     dados = request.get_json()
 
-    if not dados or 'nome' not in dados or 'tipo' not in dados or 'capacidade' not in dados:
-        return jsonify({'error': 'Dados incompletos. Nome, tipo e capacidade são obrigatórios'}), 400
+    if not dados or 'nome' not in dados or 'tipo' not in dados or 'capacidade' not in dados or 'cep' not in dados:
+        return jsonify({'error': 'Dados incompletos. Nome, tipo, capacidade e CEP são obrigatórios'}), 400
     
     try:
         nova_sala = SalaService.create_sala(
             nome=dados.get('nome'),
             tipo=dados.get('tipo'),
-            capacidade=dados.get('capacidade')
+            capacidade=dados.get('capacidade'),
+            cep=dados.get('cep')
         )
 
         return jsonify({
@@ -501,7 +502,8 @@ def create_sala():
                 "id": nova_sala.id,
                 "nome": nova_sala.nome,
                 "tipo": nova_sala.tipo,
-                "capacidade": nova_sala.capacidade
+                "capacidade": nova_sala.capacidade,
+                "cep": nova_sala.cep
             }   
         }), 201
     
