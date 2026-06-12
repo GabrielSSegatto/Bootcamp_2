@@ -283,7 +283,7 @@ def create_sessao():
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 
-# Endpoint para listar todas as sessões
+# Endpoint para listar todas as sessões com dados relacionais
 @bp.route('/sessoes', methods=['GET'])
 def get_sessoes():
     sessoes = SessaoService.get_all_sessoes()
@@ -295,8 +295,8 @@ def get_sessoes():
             "is_dub": s.is_dub,
             "sala_id": s.sala_id,
             "evento_id": s.evento_id,
-            # Se você configurou os relationship no models, pode exibir o nome:
-            # "evento_nome": s.evento.nome if s.evento else None
+            "evento_nome": s.evento.nome if s.evento else "Evento não encontrado",
+            "sala_nome": s.sala.nome if s.sala else "Sala não encontrada"
         }
         for s in sessoes
     ]
@@ -632,7 +632,7 @@ def create_reserva():
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 
-# Endpoint para listar todas as reservas
+# Endpoint para listar todas as reservas com dados cruzados
 @bp.route('/reservas', methods=['GET'])
 def get_reservas():
     reservas = ReservaService.get_all_reservas()
@@ -643,7 +643,11 @@ def get_reservas():
             "user_id": r.user_id,
             "sessao_id": r.sessao_id,
             "assento_id": r.assento_id,
-            "data_reserva": r.data_reserva.isoformat() if hasattr(r, 'data_reserva') and r.data_reserva else None
+            "data_reserva": r.data_reserva.isoformat() if hasattr(r, 'data_reserva') and r.data_reserva else None,
+            "detalhes": {
+                "assento_numero": r.assento.numero if getattr(r, 'assento', None) else "N/A",
+                "evento_nome": r.sessao.evento.nome if getattr(r, 'sessao', None) and getattr(r.sessao, 'evento', None) else "N/A"
+            }
         }
         for r in reservas
     ]
