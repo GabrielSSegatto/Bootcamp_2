@@ -279,11 +279,11 @@ class AssentoService:
 class SalaService:
     # Função para criar uma nova sala
     @staticmethod
-    def create_sala(nome, tipo, capacidade):
-        if not nome or not tipo or not capacidade:
-            raise ValueError("Nome, tipo e capacidade são obrigatórios")
+    def create_sala(nome, tipo, capacidade, cep):
+        if not nome or not tipo or not capacidade or not cep:
+            raise ValueError("Nome, tipo, capacidade e CEP são obrigatórios")
         
-        nova_sala = Sala(nome=nome, tipo=tipo, capacidade=capacidade)
+        nova_sala = Sala(nome=nome, tipo=tipo, capacidade=capacidade, cep=cep)
         db.session.add(nova_sala)
         db.session.commit()
         return nova_sala
