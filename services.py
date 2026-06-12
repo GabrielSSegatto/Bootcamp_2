@@ -4,24 +4,28 @@ import requests
 # ========== USUARIO ===========
 class UserService:
 
-    # Função para criar um novo usuário
+    # Função para criar um novo usuário (Refatorada pelo André)
     @staticmethod 
     def create_user(name, cpf):
         if not name or not cpf:
             raise ValueError("Nome e CPF são obrigatórios")
         
-        if len(cpf) != 11 or not cpf.isdigit():
+        # Melhoria: Limpeza automática de formatação (remove pontos e traços)
+        cpf_limpo = str(cpf).replace(".", "").replace("-", "").strip()
+        
+        if len(cpf_limpo) != 11 or not cpf_limpo.isdigit():
             raise ValueError("CPF deve conter exatamente 11 dígitos numéricos")
         
-        existing_user = User.query.filter_by(cpf=cpf).first()
+        existing_user = User.query.filter_by(cpf=cpf_limpo).first()
         if existing_user:
             raise ValueError("CPF já cadastrado")
         
-        novo_usuario = User(name=name, cpf=cpf)
+        # Salva no Supabase com o nome formatado bonitinho e o CPF limpo
+        novo_usuario = User(name=name.strip().title(), cpf=cpf_limpo)
         db.session.add(novo_usuario)
         db.session.commit()
         return novo_usuario
-    
+
     # Função para obter um usuário por ID
     @staticmethod
     def get_user_by_id(user_id):
@@ -76,17 +80,22 @@ class UserService:
 
 # ========== EVENTO ===========
 class EventoService:
-    # Função para criar um novo evento
+    
+   # Função para criar um novo evento (Refatorada pelo André)
     @staticmethod
     def create_evento(nome):
-        if not nome:
-            raise ValueError("Nome é obrigatório")
+        if not nome or not str(nome).strip():
+            raise ValueError("Nome é obrigatório e não pode ser vazio")
         
-        novo_evento = Evento(nome=nome)
+        # Melhoria: Padronização do nome do evento
+        nome_formatado = " ".join(nome.split()).title()
+        
+        novo_evento = Evento(nome=nome_formatado)
         db.session.add(novo_evento)
         db.session.commit()
         return novo_evento
-    
+
+
     # Função para obter um evento por ID
     @staticmethod
     def get_evento_by_id(evento_id):
