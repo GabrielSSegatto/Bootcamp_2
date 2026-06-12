@@ -1,8 +1,8 @@
-"""Initial migration with Evento
+"""feat: setup inicial do banco PostgreSQL no Supabase
 
-Revision ID: 8fcaa439c9a2
+Revision ID: f312b5c533f1
 Revises: 
-Create Date: 2026-04-10 14:57:08.060711
+Create Date: 2026-06-12 09:23:14.186356
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8fcaa439c9a2'
+revision = 'f312b5c533f1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,6 +28,7 @@ def upgrade():
     sa.Column('nome', sa.String(length=20), nullable=False),
     sa.Column('tipo', sa.String(length=20), nullable=False),
     sa.Column('capacidade', sa.Integer(), nullable=False),
+    sa.Column('cep', sa.String(length=8), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
