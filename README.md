@@ -4,11 +4,15 @@ API em Flask para gerenciamento de reservas de eventos/sessões em cinema, com C
 **Link do Deploy:** https://bootcamp-2-l6ix.onrender.com
 
 ## 👥 Equipe de Desenvolvimento
-* **Gabriel Soares Segatto** - Matrícula: [Inserir]
-* **João [Sobrenome]** - Matrícula: [Inserir]
-* **André [Sobrenome]** - Matrícula: [Inserir]
-* **Caramez [Sobrenome]** - Matrícula: [Inserir]
-* **Nicolas [Sobrenome]** - Matrícula: [Inserir]
+* **Gabriel Soares Segatto** - Matrícula: [22502904] - github: GabrielSSegatto
+
+* **João Gabriel de Moura Torres** - Matrícula: [22503395] - github: Joaooh
+
+* **André Yuri Alves Silva** - Matrícula: [2250984301] - github: yurial3445
+
+* **Gabriel Caramez Benvindo da Silva** - Matrícula: [22504116] - github: GabrielCaramez
+
+* **Nicolas Klaczko Hogan** - Matrícula: [22506264] - github: NicolasKlaczkoHogan
 
 ## 🚀 Visão geral
 O projeto resolve um problema real de controle de assentos por sessão, impedindo dupla reserva. Na etapa final, a aplicação foi migrada de um banco de dados local para uma arquitetura em nuvem, trabalhando em equipe via Pull Requests.
